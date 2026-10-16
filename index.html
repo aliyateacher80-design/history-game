@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Есептеу техникасының тарихы: Уақыт саяхаты (10 ұпай)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-between p-4 sm:p-6">
+
+    <!-- Header -->
+    <header class="w-full max-w-4xl text-center mb-6">
+        <span class="inline-block bg-amber-600/30 text-amber-400 border border-amber-500/30 text-xs font-semibold px-3 py-1 rounded-full mb-2">
+            Оқу мақсаты: 5.1.1.1 | Уақыт саяхаты ойыны (10 ұпай)
+        </span>
+        <h1 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Есептеу техникасының даму тарихы мен болашағы</h1>
+        <p class="text-slate-400 text-sm mt-1">Көне дәуірден болашақ кванттық компьютерлерге дейінгі кезеңдерді ойын арқылы шолып шық.</p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-4xl bg-slate-800 border border-slate-700/60 rounded-2xl shadow-2xl p-6 sm:p-8 flex flex-col gap-6">
+
+        <!-- STEP 0: Student Name Registration Form -->
+        <div id="register-screen" class="flex flex-col gap-6 py-4">
+            <div class="text-center space-y-2">
+                <h2 class="text-xl font-bold text-white">Уақыт саяхатына қош келдіңіз!</h2>
+                <p class="text-slate-400 text-sm">Ойынды бастау үшін аты-жөніңізді енгізіп, «Бастау» батырмасын басыңыз.</p>
+            </div>
+            <div class="max-w-md mx-auto w-full flex flex-col gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-300 mb-1">Оқушының аты-жөні:</label>
+                    <input type="text" id="student-name" placeholder="Мысалы: Айбек Серікұлы" class="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-amber-500 text-base">
+                </div>
+                <button type="button" onclick="startQuiz()" class="w-full py-3 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-xl shadow-lg shadow-amber-600/30 transition cursor-pointer">
+                    Бастау
+                </button>
+            </div>
+        </div>
+
+        <!-- QUIZ CONTAINER (Hidden initially) -->
+        <div id="quiz-container" class="hidden flex-col gap-6">
+            <!-- Stage Progress Indicator -->
+            <div class="flex items-center justify-between border-b border-slate-700 pb-4">
+                <div>
+                    <span id="step-counter" class="text-xs uppercase tracking-wider text-amber-400 font-bold">Дәуір 1 / 5</span>
+                    <h2 id="step-title" class="text-lg font-semibold text-white">Тарихи кезең</h2>
+                </div>
+                <div class="flex gap-1.5" id="dots"></div>
+            </div>
+
+            <!-- Dynamic Content Area -->
+            <div id="content-area" class="flex flex-col gap-6"></div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center pt-4 border-t border-slate-700">
+                <button type="button" id="prev-btn" onclick="prevStep()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 font-medium rounded-xl transition disabled:opacity-40 disabled:cursor-not-allowed">
+                    Артқа
+                </button>
+                <button type="button" id="next-btn" onclick="nextStep()" class="px-6 py-2 bg-amber-600 hover:bg-amber-500 text-white font-medium rounded-xl shadow-lg shadow-amber-600/30 transition cursor-pointer">
+                    Жалғастыру
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-6 text-center text-xs text-slate-500">
+        Интерактивті оқу ойыны &copy; 2026
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let studentFullName = "";
+        const stepsData = [
+            {
+                title: "1-дәуір: Алғашқы санау құралдары",
+                era: "Көне заман (Абак және Счёты)",
+                task: "Адамдар ерте заманда есептеу үшін тастарды, саусақтарды және ең алғашқы есептеу құралы — абак пен шоттарды қолданды. Бұл құралдардың негізгі атқарған қызметі қандай еді?",
+                options: [
+                    { id: 'a', text: "Қарапайым қосу және азайту амалдарын жылдам орындау үшін.", isCorrect: true, explain: "Дұрыс! Абак пен шоттар қарапайым санау және арифметикалық есептеулерге арналған көне құрал." },
+                    { id: 'b', text: "Интернетке қосылу және бейне көру үшін.", isCorrect: false, explain: "Қате! Ол кезде электр тоғы да, интернет те болған жоқ." },
+                    { id: 'c', text: "Күрделі 3D ойындарды ойнау үшін.", isCorrect: false, explain: "Қате! Бұл тек механиалық есептеу құралы." }
+                ]
+            },
+            {
+                title: "2-дәуір: Механикалық машиналар дәуірі",
+                era: "XVII–XIX ғасырлар (Паскаль және Бэббидж)",
+                task: "Блез Паскаль механикалық есептеуіш машинасын ойлап тапты, ал кейін Чарльз Бэббидж бағдарламалатын есептеу машинасының жобасын жасады. Бэббидждің бұл еңбегінің маңызы неде?",
+                options: [
+                    { id: 'a', text: "Қазіргі компьютерлердің жұмыс істеу логикасы мен бағдарламалаудың негізін қалады.", isCorrect: true, explain: "Керемет! Оның жобасы кейінгі электронды компьютерлердің атасы болып саналады." },
+                    { id: 'b', text: "Ұшақтарды басқаруға арналған қанат жасады.", isCorrect: false, explain: "Қате! Ол механикалық есептеулерге арналған." },
+                    { id: 'c', text: "Тек музыка жазуға арналған құрылғы болды.", isCorrect: false, explain: "Қате! Музыкалық аспап емес, есептеу машинасы." }
+                ]
+            },
+            {
+                title: "3-дәуір: Электронды лампылы алып машиналар",
+                era: "XX ғасырдың ортасы (ENIAC)",
+                task: "Алғашқы ірі электронды есептеуіш машиналар (ЭЕМ) жұмыс істеу үшін мыңдаған электронды шамдарды (лампыларды) қолданды. Олардың басты кемшілігі неде еді?",
+                options: [
+                    { id: 'a', text: "Өте үлкен аумақты алып, көп жылу бөліп, тез істен шығатын.", isCorrect: true, explain: "Дұрыс! Лампылар үлкен орын алып, қатты қызатын және қуатты көп жұмсайтын." },
+                    { id: 'b', text: "Өте кішкентай болып, қалтаға сыйып кететін.", isCorrect: false, explain: "Қате! Олар бірнеше бөлмені алып жататын алып машиналар болатын." },
+                    { id: 'c', text: "Интернет жылдамдығы өте жоғары болатын.", isCorrect: false, explain: "Қате! Ол кезде әлі интернет болған жоқ." }
+                ]
+            },
+            {
+                title: "4-дәуір: Дербес компьютерлер мен микропроцессорлар",
+                era: "XX ғасырдың соңы (PC дәуірі)",
+                task: "Микропроцессорлардың ойлап табылуы есептеу техникасын қалай өзгертті?",
+                options: [
+                    { id: 'a', text: "Компьютерлердің өлшемі кішірейіп, әрбір адамның үйінде немесе жұмысында қолдануға қолжетімді болды.", isCorrect: true, explain: "Өте дұрыс! Бұл дәуір барлық жерде дербес компьютерлердің (PC) таралуына жол ашты." },
+                    { id: 'b', text: "Компьютерлер бұрынғыдан да үлкенірек зауыттарға айналды.", isCorrect: false, explain: "Қате! Керісінше, өлшемі кішірейді." },
+                    { id: 'c', text: "Электр тогы мүлдем қажет болмай қалды.", isCorrect: false, explain: "Қате! Компьютер жұмыс істеу үшін әрине қуат көзі керек." }
+                ]
+            },
+            {
+                title: "5-дәуір: Болашақ перспективалары",
+                era: "XXI ғасыр және болашақ (Кванттық есептеулер)",
+                task: "Болашақ есептеу техникасының даму перспективасы ретінде қандай технология қарқынды дамуда?",
+                options: [
+                    { id: 'a', text: "Кванттық компьютерлер мен жасанды интеллект жүйелері.", isCorrect: true, explain: "Керемет! Кванттық технологиялар есептеу жылдамдығын миллион есе арттырады." },
+                    { id: 'b', text: "Тек қағаз кітаптарды қайта қолдану.", isCorrect: false, explain: "Қате! Бұл есептеу техникасының даму бағытына жатпайды." },
+                    { id: 'c', text: "Механикалық шоттарға қайта оралу.", isCorrect: false, explain: "Қате! Заман талабы жоғары технологияларға негізделген." }
+                ]
+            }
+        ];
+
+        let currentStep = 0;
+        let userAnswers = {};
+
+        function startQuiz() {
+            const nameInput = document.getElementById('student-name').value.trim();
+            if (!nameInput) {
+                alert("Өтінемін, аты-жөніңізді енгізіңіз!");
+                return;
+            }
+            studentFullName = nameInput;
+            
+            document.getElementById('register-screen').style.display = 'none';
+            const quizContainer = document.getElementById('quiz-container');
+            quizContainer.style.display = 'flex';
+            
+            renderStep();
+        }
+
+        function renderDots() {
+            let dotsHtml = '';
+            for (let i = 0; i < stepsData.length; i++) {
+                let dotClass = "w-3 h-3 rounded-full transition-all ";
+                if (i === currentStep) {
+                    dotClass += "bg-amber-500 scale-125";
+                } else if (userAnswers[i] !== undefined) {
+                    dotClass += "bg-indigo-500";
+                } else {
+                    dotClass += "bg-slate-600";
+                }
+                dotsHtml += `<span class="${dotClass}"></span>`;
+            }
+            document.getElementById('dots').innerHTML = dotsHtml;
+        }
+
+        function renderStep() {
+            const step = stepsData[currentStep];
+            document.getElementById('step-counter').textContent = `Дәуір ${currentStep + 1} / ${stepsData.length}`;
+            document.getElementById('step-title').textContent = step.title;
+            renderDots();
+
+            let html = `
+                <div class="bg-slate-700/40 p-4 rounded-xl border border-slate-700 space-y-2">
+                    <p class="text-xs text-amber-400 font-semibold uppercase tracking-wide">Кезең: ${step.era}</p>
+                    <p class="text-slate-200 text-base sm:text-lg leading-relaxed">${step.task}</p>
+                </div>
+                <div class="flex flex-col gap-3">
+            `;
+
+            step.options.forEach((opt) => {
+                const isSelected = userAnswers[currentStep] === opt.id;
+                html += `
+                    <div onclick="selectOption('${opt.id}')" class="flex flex-col p-4 rounded-xl border transition cursor-pointer bg-slate-700/20 border-slate-700 hover:bg-slate-700/50 ${isSelected ? 'border-amber-500 bg-amber-950/40 ring-1 ring-amber-500' : ''}">
+                        <div class="flex items-start gap-3">
+                            <input type="radio" name="step-option" value="${opt.id}" ${isSelected ? 'checked' : ''} class="mt-1 text-amber-600 focus:ring-amber-500 bg-slate-900 border-slate-600 pointer-events-none">
+                            <span class="text-slate-200 text-sm sm:text-base select-none font-medium">${opt.text}</span>
+                        </div>
+                        ${isSelected ? `<p class="mt-2 text-xs text-amber-300 pl-7 italic">${opt.explain}</p>` : ''}
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            document.getElementById('content-area').innerHTML = html;
+
+            document.getElementById('prev-btn').disabled = currentStep === 0;
+            document.getElementById('next-btn').textContent = currentStep === stepsData.length - 1 ? "Нәтижені көру (10 ұпай)" : "Жалғастыру";
+        }
+
+        function selectOption(id) {
+            userAnswers[currentStep] = id;
+            renderStep();
+        }
+
+        function nextStep() {
+            if (userAnswers[currentStep] === undefined) {
+                alert("Жалғастыру үшін нұсқалардың бірін таңдаңыз!");
+                return;
+            }
+
+            if (currentStep < stepsData.length - 1) {
+                currentStep++;
+                renderStep();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                renderStep();
+            }
+        }
+
+        function showResults() {
+            let correctCount = 0;
+            stepsData.forEach((step, idx) => {
+                const chosenId = userAnswers[idx];
+                const chosenOpt = step.options.find(o => o.id === chosenId);
+                if (chosenOpt && chosenOpt.isCorrect) {
+                    correctCount++;
+                }
+            });
+
+            const totalScore = Math.round((correctCount / stepsData.length) * 10);
+            
+            let feedbackText = "";
+            let badgeColor = "";
+
+            if (totalScore >= 9) {
+                feedbackText = "Керемет! Сіз есептеу техникасының көне заманнан бүгінгі күнге дейінгі даму тарихын және болашақ перспективаларын өте жақсы түсінесіз!";
+                badgeColor = "text-emerald-400 bg-emerald-950/40 border-emerald-500/30";
+            } else if (totalScore >= 6) {
+                feedbackText = "Жақсы нәтиже! Тарихи кезеңдерді жақсы меңгердіңіз, бірақ кейбір жаңалықтардың маңызын қайталап шыққан артық болмайды.";
+                badgeColor = "text-amber-400 bg-amber-950/40 border-amber-500/30";
+            } else {
+                feedbackText = "Қайта шолып шығыңыз! Есептеу техникасының даму кезеңдерін оқулықтан қайта оқып көріңіз.";
+                badgeColor = "text-rose-400 bg-rose-950/40 border-rose-500/30";
+            }
+
+            let resultHtml = `
+                <div class="text-center py-6 flex flex-col items-center gap-4">
+                    <div class="bg-slate-900/60 border border-slate-700 px-6 py-3 rounded-xl w-full max-w-md text-left">
+                        <p class="text-xs text-slate-400 uppercase font-semibold">Оқушы:</p>
+                        <p class="text-lg font-bold text-white">${studentFullName}</p>
+                    </div>
+                    
+                    <div class="inline-block px-5 py-2 rounded-full border text-base font-bold ${badgeColor}">
+                        Жинаған ұпайыңыз: ${totalScore} / 10 ұпай (${correctCount} дұрыс жауап / ${stepsData.length})
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-white">Уақыт саяхаты сәтті аяқталды!</h2>
+                    <p class="text-slate-300 max-w-lg text-sm sm:text-base leading-relaxed">${feedbackText}</p>
+                    
+                    <button type="button" onclick="location.reload()" class="mt-4 px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-medium rounded-xl shadow-lg transition cursor-pointer">
+                        Ойынды қайта бастау
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('content-area').innerHTML = resultHtml;
+            document.getElementById('prev-btn').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('step-counter').textContent = "Қорытынды баға";
+            document.getElementById('step-title').textContent = "Уақыт саяхатының нәтижесі";
+            document.getElementById('dots').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
